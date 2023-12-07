@@ -1,6 +1,6 @@
 # Generate tests and mocks, and serialize objects as Kotlin code
 
-**Why:** if classes have many fields, developing tests and mocks is time-consuming. `kotests-generator` makes it faster.
+**Why:** if classes have many fields, developing tests and mocks is time-consuming. `kotests-mockks-generator` makes it faster.
 
 **What:**
 * for existing or new code, serialize actual objects into compilable Kotlin, in a format that is easy to use in tests
@@ -9,13 +9,7 @@
 
 ### Plug it in
 
-```kotlin
-repositories {
-    maven { url = uri("https://binrepo.target.com/artifactory/transportation-dmo-prod") }
-}
-
-testImplementation("com.tgt.trans.dmo.common:kotests-generator:0.1.6")
-```
+TBD
 
 ## Speed up creating data to use in tests 
 
@@ -512,18 +506,6 @@ and get the output we want.
 [Example 5 in this file](src/test/kotlin/unit/com/tgt/trans/dmo/common/examples/ReadmeExamplesKotest.kt)
 
 
-## Getting the library
-The repository:
-```kotlin
-   repositories {
-        maven(url = "https://binrepo.target.com/artifactory/transportation-dmo-prod")
-    }
-```
-The library:
-```kotlin
-    testImplementation("com.tgt.trans.dmo.common:kotests-generator:0.2.1")
-```
-
 ## How it works
 
 This library uses reflection, so it can generate tests/mocks for a class as soon as it compiles. It does not parse source code.
@@ -596,10 +578,3 @@ The following cases are not supported at this time:
 * generics
 * arrays
 
-
-### Development
-If you are making a change and want to test the code locally with another project, add the following to the bottom of `settings.gradle.kts` in the project you wish to test (path is relative to rootProject set in file):
-
-```
-includeBuild("../kotests-generator")
-```

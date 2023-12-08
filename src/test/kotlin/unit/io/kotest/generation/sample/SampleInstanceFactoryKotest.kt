@@ -1,8 +1,6 @@
 package io.kotest.generation.sample
 
-import com.tgt.trans.common.testhelpers.collections.matchElementsIgnoringOrder
 import io.kotest.generation.*
-import io.kotest.generation.actual.ExactClassSerializer
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -116,12 +114,6 @@ class SampleInstanceFactoryKotest: StringSpec() {
 
         "sample data class with collections as fields" {
             val actual = sut.serializeSampleValue(ComplexThing::class)
-//            actual.sourceCode().forEach {
-//                println("\"\"\"$it\"\"\",")
-//            }
-//            actual.qualifiedNames().forEach {
-//                println("\"$it\",")
-//            }
             assertSoftly {
                 actual.sourceCode() shouldBe listOf(
                     """ComplexThing(""",
@@ -145,15 +137,13 @@ class SampleInstanceFactoryKotest: StringSpec() {
             val actual = sut.serializeSampleValue(MyThingWithPrivatPrimaryConstructor::class)
             actual.sourceCode().forEach { println("\"\"\"$it\"\"\",") }
             assertSoftly {
-                matchElementsIgnoringOrder(
-                    listOf(
+                actual.qualifiedNames().toSet() shouldBe
+                    setOf(
                         "io.mockk.every",
                         "io.mockk.mockk",
                         "io.mockk.justRun",
                         "io.kotest.generation.MyThingWithPrivatPrimaryConstructor",
-                    ),
-                    actual.qualifiedNames()
-                )
+                    )
                 actual.sourceCode() shouldBe listOf(
                     """run {""",
                     """val ret = mockk<MyThingWithPrivatPrimaryConstructor>(relaxed = true)""",

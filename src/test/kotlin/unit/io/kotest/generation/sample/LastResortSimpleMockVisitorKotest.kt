@@ -1,7 +1,5 @@
 package io.kotest.generation.sample
 
-import com.tgt.trans.common.testhelpers.collections.matchLists
-import com.tgt.trans.common.testhelpers.collections.matchSets
 import io.kotest.generation.common.CodeSnippet
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
@@ -15,31 +13,27 @@ class LastResortSimpleMockVisitorKotest: StringSpec() {
         "mockks a class" {
             val buffer = CodeSnippet()
             systemToTest.handle(MyClass::class, buffer, false)
-            matchLists(
+            buffer.sourceCode() shouldBe
                 listOf(
                     "run {",
                     "val ret = mockk<MyClass>(relaxed = true)",
                     "",
                     "ret",
                     "},"
-                ),
-                buffer.sourceCode()
-            )
+                )
         }
 
         "mockks an interface" {
             val buffer = CodeSnippet()
             systemToTest.handle(MyInterface::class, buffer, false)
 //            serializeToKotlin("aaa.txt", buffer.sourceCode())
-            matchLists(
+            buffer.sourceCode() shouldBe
                 listOf(
                     """run {""",
                     """val ret = mockk<MyInterface>(relaxed = true)""",
                     """""",
                     """ret""",
                     """},"""
-            ),
-                buffer.sourceCode()
             )
         }
 
@@ -47,15 +41,13 @@ class LastResortSimpleMockVisitorKotest: StringSpec() {
             val buffer = CodeSnippet()
             systemToTest.handle(Location::class, buffer, false)
 //            serializeToKotlin("aaa.txt", buffer.qualifiedNames())
-            matchSets(
+            buffer.qualifiedNames() shouldBe
                 setOf(
                     """io.mockk.every""",
                     """io.mockk.mockk""",
                     """io.mockk.justRun""",
                     """io.kotest.generation.sample.LastResortSimpleMockVisitorKotest.Location""",
-                ),
-                buffer.qualifiedNames()
-            )
+                )
         }
     }
 

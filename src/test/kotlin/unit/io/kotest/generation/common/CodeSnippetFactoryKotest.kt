@@ -1,6 +1,5 @@
 package io.kotest.generation.common
 
-import com.tgt.trans.common.testhelpers.collections.matchLists
 import io.kotest.generation.*
 import io.kotest.generation.generators.actual.serializeToKotlin
 import io.kotest.generation.kotest.parameterToValueAssignment
@@ -107,16 +106,14 @@ weight = BigDecimal("42")
                 ::parameterToValueAssignment,
                 parameterName = "name")
 //            serializeToKotlin("aaa.kt", buffer.sourceCode())
-            matchLists(
+            buffer.sourceCode() shouldBe
                 listOf(
                     """name = run {
 val ret = mockk<Name>(relaxed = true)
 
 ret
 }"""
-                ),
-                buffer.sourceCode()
-            )
+                )
         }
     }
 

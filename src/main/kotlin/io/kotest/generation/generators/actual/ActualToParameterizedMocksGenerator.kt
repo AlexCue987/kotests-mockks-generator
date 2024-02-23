@@ -6,6 +6,9 @@ import io.kotest.generation.actual.SerializeToParameterizedMockStrategy
 import io.kotest.generation.common.*
 import java.io.File
 
+fun serializeToParameterizedMocks(vararg instances: Any) =
+    serializeToParameterizedMocks("ParameterizedMockksFrom${simpleNameOfFirstInstance(*instances)}.kt", *instances)
+
 fun serializeToParameterizedMocks(filename: String,
                             vararg instances: Any
 ) = serializeToParameterizedMocksWithCustomization(

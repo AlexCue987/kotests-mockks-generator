@@ -9,7 +9,8 @@ import kotlin.reflect.KClass
 
 class ActualInstanceFactory(
     val customSerializers: List<SerializerVisitor> = listOf(),
-    serializeByFieldsStrategy: SerializeByFieldsStrategy = SerializeToInstanceStrategy()
+    serializeByFieldsStrategy: SerializeByFieldsStrategy = SerializeToInstanceStrategy(),
+    type: ActualInstanceFactoryType = ActualInstanceFactoryType.OUTER
 ) {
     private val nullValueVisitor = NullValueVisitor()
     private val customSerializer = SerializersList(customSerializers)
@@ -54,12 +55,15 @@ class ActualInstanceFactory(
         buffer.addLine("// Cannot serialize $instance")
     }
 
-    val innerLevelFactory: ActualInstanceFactory
-     by lazy {
-        ActualInstanceFactory(
+    val innerLevelFactory: ActualInstanceFactory = when(type) {
+        ActualInstanceFactoryType.OUTER -> ActualInstanceFactory(
             customSerializers,
-            SerializeToInstanceStrategy()
+            SerializeToInstanceStrategy(),
+            type = ActualInstanceFactoryType.INNER
         )
+        ActualInstanceFactoryType.INNER -> this
     }
+
+    enum class ActualInstanceFactoryType { OUTER, INNER }
 }
 

@@ -27,6 +27,8 @@ class PrimaryConstructorFieldsVisitor(
         }
     }
 
+    private var level = 0
+
     fun constructorToUse(instance: Any): KFunction<Any>? {
         val primaryConstructor = instance::class.primaryConstructor
         if(primaryConstructor != null && primaryConstructor.visibility == KVisibility.PUBLIC) {
@@ -42,6 +44,10 @@ class PrimaryConstructorFieldsVisitor(
             strategy.exposePrivateFields,
             instance
         )
+        if(++level >= MAX_LEVEL) {
+            buffer.addText("// cannot serialize deep recursion")
+            return
+        }
         fieldValues.forEachIndexed { index, fieldValue ->
 //            buffer.addText("${fieldValue.name} = ")
             if(strategy.canHandleField(fieldValue.klass, fieldValue.name, fieldValue.value, buffer)
@@ -59,6 +65,11 @@ class PrimaryConstructorFieldsVisitor(
                 }
             }
         }
+        level--
+    }
+
+    companion object {
+        const val MAX_LEVEL = 10
     }
 }
 

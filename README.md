@@ -180,22 +180,6 @@ object SerializedMocks {
     }
 }
 ```
-### Serializing actual data
-
-To speed up creating test data, we can serialize actual instances of `MyParams` and `SampleComplexClass` as follows:
-```kotlin
-val params = MyParams("some", "parameters")
-
-val results = doSomething(params)
-// serialize as constructor calls
-serializeToKotlin(params, results)
-// serialize as kotest assertions
-serializeToAssertions(results)
-// serialize as mocks
-serializeToMocks(results)
-```
-The instances are serialized in three files: as constructor calls, as Kotest assertions, and as mocks.
-
 ### Serializing actual instances as constructor calls
 
 If all we need is variable assignment, do this:
@@ -419,44 +403,6 @@ generateAllMockks(
 
 [Complete example in ReadmeExample1Kotest](src/test/kotlin/unit/com/tgt/trans/dmo/common/examples/ReadmeExample1Kotest.kt)
 
-
-## Parameterized tests
-
-Creating parameterized tests can take significant time, much of which can be automated away.
-
-## Generation
-
-The following code generates parameterized tests:
-```kotlin
-            val testCases: List<List<Any?>> = testCases()
-            generateParamsKotest(
-                "src/test/kotlin/unit/generated/GeneratedParamsTestHappyPath.kt",
-                instanceToTest = MyCalendar(setOf()),
-                callableToTest = MyCalendar::advance,
-                params = testCases
-            )
-```
-These tests look as follows:
-```kotlin
-        "parameterized test" {
-            listOf(
-                row(LocalDate.of(2022, 2, 7), 1, LocalDate.of(2022, 2, 8), "Add Clue"),
-                row(LocalDate.of(2022, 2, 7), 2, LocalDate.of(2022, 2, 9), "Add Clue"),
-// snip
-            ).forAll { (date,
-                           days,
-                           expectedOutcome,
-                           clue) ->
-                withClue(clue) {
-                    systemToTest.advance(
-                        date,
-                        days
-                    ) shouldBe expectedOutcome
-                }
-            }
-        }
-```
-[Example 11 in this file](src/test/kotlin/unit/com/tgt/trans/dmo/common/examples/ReadmeExamplesKotest.kt)
 
 
 ## Dealing with lists, sets, and maps.
